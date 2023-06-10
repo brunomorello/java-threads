@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class FindAndCountWordsHttpServer {
     private static final String INPUT_FILE = "./resources/chapter4/war_and_peace.txt";
-    private static final int NUM_OF_TREADS = 1;
+    private static final int NUM_OF_THREADS = 8;
 
     public static void main(String[] args) throws IOException {
         String book = new String(Files.readAllBytes(Paths.get(INPUT_FILE)));
@@ -26,7 +26,7 @@ public class FindAndCountWordsHttpServer {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/search", new WordCountHandler(book));
 
-        Executor executor = Executors.newFixedThreadPool(NUM_OF_TREADS);
+        Executor executor = Executors.newFixedThreadPool(NUM_OF_THREADS);
         server.setExecutor(executor);
         server.start();
     }
