@@ -8,12 +8,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class BinaryTreeAdvancedLocking {
 
     public static final int HIGHEST_PRICE = 1000;
+    public static final int ITERATOR_TEST = 10000000;
 
     public static void main(String[] args) throws InterruptedException {
         InventoryDatabase inventoryDatabase = new InventoryDatabase();
         Random random = new Random();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < ITERATOR_TEST; i++) {
             inventoryDatabase.addItem(random.nextInt(HIGHEST_PRICE));
         }
 
@@ -38,7 +39,7 @@ public class BinaryTreeAdvancedLocking {
 
         for (int readerIndex = 0; readerIndex < numOfReaderThreads; readerIndex++) {
             Thread reader = new Thread(() -> {
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < ITERATOR_TEST; i++) {
                     int upperBoundPrice = random.nextInt(HIGHEST_PRICE);
                     int lowerBoundPrice = upperBoundPrice > 0 ? random.nextInt(upperBoundPrice) : 0;
                     inventoryDatabase.getNumberOfItemsInPriceRange(lowerBoundPrice, upperBoundPrice);
@@ -72,8 +73,8 @@ public class BinaryTreeAdvancedLocking {
         private Lock writeLock = reentrantReadWriteLock.writeLock();
 
         public int getNumberOfItemsInPriceRange(int lowerBond, int upperBond) {
-//            lock.lock();
-            readLock.lock();
+            lock.lock();
+//            readLock.lock();
 
             try {
                 Integer fromKey = priceToCountMap.ceilingKey(lowerBond);
@@ -91,14 +92,14 @@ public class BinaryTreeAdvancedLocking {
                 }
                 return sum;
             } finally {
-//                lock.lock();
-                readLock.unlock();
+                lock.unlock();
+//                readLock.unlock();
             }
         }
 
         public void addItem(int price) {
-//            lock.lock();
-            writeLock.lock();
+            lock.lock();
+//            writeLock.lock();
             try {
                 Integer numOfItemsForPrice = priceToCountMap.get(price);
                 if (numOfItemsForPrice == null) {
@@ -107,14 +108,14 @@ public class BinaryTreeAdvancedLocking {
                     priceToCountMap.put(price, numOfItemsForPrice + 1);
                 }
             } finally {
-//                lock.lock();
-                writeLock.unlock();
+                lock.unlock();
+//                writeLock.unlock();
             }
         }
 
         public void removeItem(int price) {
-//            lock.lock();
-            writeLock.lock();
+            lock.lock();
+//            writeLock.lock();
             try {
                 Integer numOfItemsForPrice = priceToCountMap.get(price);
                 if (numOfItemsForPrice == null || numOfItemsForPrice == 1) {
@@ -123,8 +124,8 @@ public class BinaryTreeAdvancedLocking {
                     priceToCountMap.put(price, numOfItemsForPrice -1);
                 }
             } finally {
-//                lock.lock();
-                writeLock.unlock();
+                lock.unlock();
+//                writeLock.unlock();
             }
         }
     }
