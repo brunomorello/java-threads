@@ -11,6 +11,7 @@ public class MatrixCalculator {
     private static final String OUTPUT_FILE = "./resources/chapter8/matrices_result.txt";
 
     public static void main(String[] args) throws IOException {
+        // Condition Variables wait() notify() notifyAll()
         ThreadSafeQueue threadSafeQueue = new ThreadSafeQueue();
         File inputFile = new File(INPUT_FILE);
         File outputFile = new File(OUTPUT_FILE);
