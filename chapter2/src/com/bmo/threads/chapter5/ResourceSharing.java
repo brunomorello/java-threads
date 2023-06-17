@@ -1,5 +1,7 @@
 package com.bmo.threads.chapter5;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ResourceSharing {
     public static void main(String[] args) throws InterruptedException {
         InventoryCounter inventoryCounter = new InventoryCounter();
@@ -57,18 +59,27 @@ public class ResourceSharing {
     }
 
     private static class InventoryCounter {
-        private int items = 0;
+//        private int items = 0;
+        private AtomicInteger items = new AtomicInteger(0);
 
-        public synchronized void increment() {
-            items++;
+//        public synchronized void increment() {
+//            items++;
+//        }
+//
+//        public synchronized void decrement() {
+//            items--;
+//        }
+        public void increment() {
+            items.incrementAndGet();
         }
 
-        public synchronized void decrement() {
-            items--;
+        public void decrement() {
+            items.decrementAndGet();
         }
 
         public int getItems() {
-            return items;
+//            return items;
+            return items.get();
         }
     }
 }
