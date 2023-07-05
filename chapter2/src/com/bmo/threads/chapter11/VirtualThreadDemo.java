@@ -5,7 +5,7 @@ import java.util.List;
 
 public class VirtualThreadDemo {
 
-    private static final int NUM_OF_VIRTUAL_THREADS = 2;
+    private static final int NUM_OF_VIRTUAL_THREADS = 20;
 
     public static void main(String[] args) throws InterruptedException {
         Runnable runnable = () -> System.out.println("Inside thread: " + Thread.currentThread());
@@ -14,7 +14,7 @@ public class VirtualThreadDemo {
 
         for (int i = 0; i < NUM_OF_VIRTUAL_THREADS; i++) {
             // it will be available on JDK 21
-            Thread thread = Thread.ofVirtual.unstarted(runnable);
+            Thread thread = Thread.ofVirtual().unstarted(runnable);
             threadList.add(thread);
         }
 
